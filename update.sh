@@ -165,11 +165,11 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     # Update source hash
     sed -i "s|hash = \"sha256-.*\";|hash = \"sha256-${SRC_HASH}\";|" module.nix
 
-    # Update vendor hash
+    # Update vendor hash (handles both quoted strings and lib.fakeHash)
     if [[ "$VENDOR_HASH" == sha256-* ]]; then
-        sed -i "s|vendorHash = \".*\";|vendorHash = \"${VENDOR_HASH}\";|" module.nix
+        sed -i "s|vendorHash = .*;|vendorHash = \"${VENDOR_HASH}\";|" module.nix
     else
-        sed -i "s|vendorHash = \".*\";|vendorHash = \"sha256-${VENDOR_HASH}\";|" module.nix
+        sed -i "s|vendorHash = .*;|vendorHash = \"sha256-${VENDOR_HASH}\";|" module.nix
     fi
 
     echo "✅ module.nix updated successfully!"
