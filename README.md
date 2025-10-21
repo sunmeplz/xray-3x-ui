@@ -96,6 +96,63 @@ http://your-server-ip:2053
 
 Default credentials can be found in the [3x-ui documentation](https://github.com/MHSanaei/3x-ui).
 
+## Updating the Module
+
+To update to a new version of 3x-ui, use the interactive update script:
+
+### Interactive Update (Recommended)
+
+Run the update script without arguments to see available versions:
+
+```bash
+cd /path/to/xray-3x-ui
+./update.sh
+```
+
+The script will:
+1. Check available Go version in nixpkgs
+2. Fetch the latest 3 releases from GitHub with their Go requirements
+3. Let you select which version to update to
+4. Automatically calculate source hash and vendor hash
+5. Update `module.nix` with all new values
+
+### Direct Version Update
+
+You can also specify a version directly:
+
+```bash
+./update.sh 2.8.5
+```
+
+### What the script does
+
+- Validates Go version compatibility
+- Calculates source hash using `nix-prefetch-url`
+- Calculates vendor hash by cloning and running `go mod vendor`
+- Updates version, minGoVersion, source hash, and vendor hash in `module.nix`
+- Prompts for confirmation before making changes
+
+### Manual Update
+
+If you prefer to update manually:
+
+1. Update the version in `module.nix`:
+   ```nix
+   version = "2.8.5";
+   ```
+
+2. Get the source hash:
+   ```bash
+   nix-prefetch-url --unpack https://github.com/MHSanaei/3x-ui/archive/refs/tags/v2.8.5.tar.gz
+   ```
+
+3. Calculate vendor hash:
+   ```bash
+   git clone --depth 1 --branch v2.8.5 https://github.com/MHSanaei/3x-ui.git /tmp/3x-ui
+   cd /tmp/3x-ui
+   nix-shell -p go git --run 'go mod vendor && nix hash path vendor'
+   ```
+
 ## License
 
 MIT License - See [LICENSE](LICENSE) file for details.

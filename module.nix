@@ -24,7 +24,7 @@ let
         hash = "sha256-twTCFFpKBU8Sw+8f9Z4VkF9Xaf37XRH5G1dkr97/dzA=";
       };
 
-      vendorHash = "sha256-lKmajeHEHEv47QWWJVgd3Me31lubJKKWIpdTvpgQm3c=";
+      vendorHash = lib.fakeHash;
 
       ldflags = [ "-s" "-w" ];
 
